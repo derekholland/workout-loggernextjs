@@ -1,0 +1,41 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL") // Database connection string from .env file
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Workout model represents a workout session.
+model Workout {
+  id        Int        @id @default(autoincrement()) // Primary key, auto-incremented integer
+  date      DateTime   @default(now()) // Date and time of the workout, defaults to current time
+  exercises Exercise[] // One-to-many relationship with Exercise
+
+  @@map("workouts") // Maps the model to the 'workouts' table in the database
+}
+
+// Exercise model represents an exercise within a workout.
+model Exercise {
+  id        Int     @id @default(autoincrement()) // Primary key, auto-incremented integer
+  name      String // Name of the exercise (e.g., Squat, Bench Press)
+  workoutId Int // Foreign key referencing Workout
+  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade) // Defines the relationship with Workout with cascade delete
+  sets      Set[] // One-to-many relationship with Set
+
+  @@map("exercises") // Maps the model to the 'exercises' table in the database
+}
+
+// Set model represents a set within an exercise.
+model Set {
+  id         Int      @id @default(autoincrement()) // Primary key, auto-incremented integer
+  reps       Int // Number of repetitions in the set
+  weight     Int // Weight used in the set (e.g., in kilograms)
+  exerciseId Int // Foreign key referencing Exercise
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade) // Defines the relationship with Exercise with cascade delete
+
+  @@map("sets") // Maps the model to the 'sets' table in the database
+}
