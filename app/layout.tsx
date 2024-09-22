@@ -1,5 +1,6 @@
 // app/layout.tsx
 
+import Navbar from './components/Navbar';
 import './globals.css'; // Import global styles
 import { Inter } from 'next/font/google'; // Import Inter font from Google Fonts
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				{' '}
 				{/* Applies the Inter font */}
+				<Navbar />
 				{children} {/* Renders the current page's content */}
 			</body>
 		</html>
